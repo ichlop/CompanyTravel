@@ -1,0 +1,10 @@
+Id,Name,Email,AddressCity,Nationality,Category
+1,Maria Iordanou,miordanou@mail.com ,Athens,Greek,Individual
+2,Dimitriou Dimitrios,ddimitriou@mail.com,Athens,Greek,Individual
+3,Ioannis Ioannou,iioannou@mail.com,Athens,Greek,Business
+4,Antonio Molinari,amolinari@mail.com,Milan,Italian,Individual
+5,Frederico Rossi,frossi@mail.com,Milan,Italian,Individual
+6,Mario Conti,mconti@mail.com,Rome,Italian,Business
+7,Nathan Martin,nmartin@mail.com,Lyon,French,Business
+8,Enzo Collin,ecollin@mail.com,Lyon,French,Individual
+9,Frederic Michel,fmichel@mail.com,Athens,French,Individual
