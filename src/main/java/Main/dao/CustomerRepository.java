@@ -6,39 +6,39 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CustomerRepository implements DaoRepository<String> {
 
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(1000);
 
     @Override
     public int addToDb(Connection conn) throws SQLException, ClassNotFoundException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Name: ");
-        String cName=scanner.nextLine();
+        String cName = scanner.nextLine();
         System.out.println("Email: ");
-        String email=scanner.nextLine();
+        String email = scanner.nextLine();
         System.out.println("AddressCity: ");
-        String addressCity=scanner.nextLine();
+        String addressCity = scanner.nextLine();
         System.out.println("Nationality: ");
-        String nationality=scanner.nextLine();
+        String nationality = scanner.nextLine();
         System.out.println("Category: ");
-        String category=scanner.nextLine();
+        String category = scanner.nextLine();
 
         Class.forName("com.mysql.jc.jdbc.Driver");
         Statement statement = conn.createStatement();
 
-        int id = ID_GENERATOR.getAndIncrement();
+        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer ( id int primary key auto_increment , CName , email, ,AddressCity, Nationality, Category ) "
-                + " values ( " + id + cName + email + addressCity + nationality + category ;
+                + " values ( " + id + cName + email + addressCity + nationality + category;
 
         statement.executeUpdate(query);
 
-        return id;
+        return id.compareTo(id);
     }
 
     @Override
@@ -50,13 +50,13 @@ public class CustomerRepository implements DaoRepository<String> {
 
         while (rs.next()) {
             System.out.println(rs.getString("CName") + "," + rs.getString("Email") +
-            "," + rs.getString("Address") + "," + rs.getString("Nationality") +
-            "," + rs.getString("Category"));
+                    "," + rs.getString("Address") + "," + rs.getString("Nationality") +
+                    "," + rs.getString("Category"));
         }
     }
 
     @Override
-    public void updatetoDb(int id, String newEmail, Connection conn) throws SQLException {
+    public void updateDb(int id, String newEmail, Connection conn) throws SQLException {
 
         // Open a connection
         Statement stmt = conn.createStatement();
@@ -79,8 +79,7 @@ public class CustomerRepository implements DaoRepository<String> {
     }
 
     @Override
-    public List<String> getfromDb(Connection conn) throws SQLException {
-        String query = "select *  from Customer  ";
+    public List<String> getListfromDb(Connection conn, String query) throws SQLException {
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(query);
 

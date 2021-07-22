@@ -17,8 +17,7 @@ public class CustomerService extends Customer {
             amount = (amount * INDIVIDUAL_SURCHARGE);
             if (payType.equals(PayType.CREDIT_CARD))
                 amount = (amount * CREDIT_PAYMENT);
-        }
-        else {
+        } else {
             amount = (amount * BUSINESS_DISCOUNT);
             if (payType.equals(PayType.CREDIT_CARD))
                 amount = (amount * CREDIT_PAYMENT);

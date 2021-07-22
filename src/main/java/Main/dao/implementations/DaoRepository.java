@@ -9,7 +9,7 @@ public interface DaoRepository<T> {
     //CRUD
     int addToDb(Connection connection) throws SQLException, ClassNotFoundException;
     void getfromDb(int id, Connection conn) throws SQLException, ClassNotFoundException;
-    void updatetoDb(int id, String newEmail, Connection conn) throws SQLException;
+    void updateDb(int id, String newEmail, Connection conn) throws SQLException;
     boolean deleteFromDb(int id, Connection conn) throws SQLException;
-    List<T> getfromDb(Connection connection) throws SQLException;
+    List<T> getListfromDb(Connection conn, String query) throws SQLException;
 }

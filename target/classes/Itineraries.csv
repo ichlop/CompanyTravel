@@ -1,4 +1,4 @@
-Id,DepartureAirportId,DestinationAirportId,Departuredate airlines
+Id,DepartureAirportId,DestinationAirportId,Departuredate, airlines
 1,ATH,PAR,2020-12-01 13:35:00.000,SkyLines
 2,ATH,LON,2020-12-01 14:40:00.000,SkyLines
 3,ATH,AMS,2020-12-01 16:45:00.000,SkyLines

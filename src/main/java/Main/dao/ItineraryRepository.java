@@ -55,7 +55,7 @@ public class ItineraryRepository implements DaoRepository{
         }
 
         @Override
-        public void updatetoDb(int id, String newEmail, Connection conn) throws SQLException {
+        public void updateDb(int id, String newEmail, Connection conn) throws SQLException {
 
             Statement stmt = conn.createStatement();
             Scanner departureDate = new Scanner(System.in);
@@ -76,10 +76,10 @@ public class ItineraryRepository implements DaoRepository{
             return true;
         }
 
-        @Override
-        public List<Customer> getfromDb(Connection connection) {
+    @Override
+    public List getListfromDb(Connection conn, String query) throws SQLException {
+        return null;
+    }
 
-            return null;
-        }
 
 }
