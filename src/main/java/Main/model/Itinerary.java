@@ -1,11 +1,12 @@
 package Main.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Itinerary {
+public class Itinerary{
     private int id;
     private int departureAirportId;
     private int destinationAirportId;
-    private Date departureDate;
+    private LocalDate departureDate;
     private String airlines;
+
 }

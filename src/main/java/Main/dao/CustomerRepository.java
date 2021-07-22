@@ -1,103 +1,95 @@
 package Main.dao;
 
 import Main.dao.implementations.DaoRepository;
-import Main.model.Customer;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class CustomerRepository implements DaoRepository {
+public class CustomerRepository implements DaoRepository<String> {
 
-    private Connection conn;
-
-    public void CustomerRepositoryImpl(Connection conn) {
-        this.conn = conn;
-    }
-
-
-    public int createTableCustomers() throws SQLException {
-
-        String query = "create table Customer ( id int primary key auto_increment , firstName varchar(100), LastName varchar(100), email varchar(100) ) ";
-        PreparedStatement statement = conn.prepareStatement(query);
-        statement.executeUpdate();
-        return 1;
-    }
-
-//    @Override
-//    public int addtoDb(Customer customer) throws SQLException {
-//
-//        String query = "insert into Customer ( CName, Email, AddressCity, Nationality, Category ) values(?,?,?,?,?)";
-//
-//        PreparedStatement statement = conn.prepareStatement(query);
-//        statement.setString(1, customer.getName());
-//        statement.setString(2, customer.getEmail());
-//        statement.setString(3, customer.getAddressCity());
-//        statement.setString(4, customer.getNationality());
-//        statement.setString(5, customer.getCategory());
-//
-//        statement.executeUpdate();
-//
-//        int last_inserted_id = -1;
-//        ResultSet rs = statement.getGeneratedKeys();
-//        if (rs.next()) {
-//            last_inserted_id = rs.getInt(1);
-//        }
-//
-//        return last_inserted_id;
-//    }
+    private static AtomicInteger ID_GENERATOR = new AtomicInteger(1000);
 
     @Override
-    public int addtoDb(Object o) throws SQLException {
-        return 0;
+    public int addToDb(Connection conn) throws SQLException, ClassNotFoundException {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Name: ");
+        String cName=scanner.nextLine();
+        System.out.println("Email: ");
+        String email=scanner.nextLine();
+        System.out.println("AddressCity: ");
+        String addressCity=scanner.nextLine();
+        System.out.println("Nationality: ");
+        String nationality=scanner.nextLine();
+        System.out.println("Category: ");
+        String category=scanner.nextLine();
+
+        Class.forName("com.mysql.jc.jdbc.Driver");
+        Statement statement = conn.createStatement();
+
+        int id = ID_GENERATOR.getAndIncrement();
+
+        String query = "insert into Customer ( id int primary key auto_increment , CName , email, ,AddressCity, Nationality, Category ) "
+                + " values ( " + id + cName + email + addressCity + nationality + category ;
+
+        statement.executeUpdate(query);
+
+        return id;
     }
 
     @Override
-    public Customer getfromDb(int id) throws SQLException {
-        String query = "select CName, Email, AddressCity, Nationality, Category  from Customer  ";
-        PreparedStatement statement = conn.prepareStatement(query);
-        ResultSet rs = statement.executeQuery();
+    public void getfromDb(int id, Connection conn) throws SQLException, ClassNotFoundException {
 
-        rs.next();
-        Customer customer = new Customer();
-        customer.setName(rs.getString(1));
-        customer.setEmail(rs.getString(2));
-        customer.setAddressCity(rs.getString(3));
-        customer.setNationality(rs.getString(4));
-//       customer.setCategory(rs.getString(5));
-        return customer;
+        String query = "select *  from Customer  ";
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(query);
 
+        while (rs.next()) {
+            System.out.println(rs.getString("CName") + "," + rs.getString("Email") +
+            "," + rs.getString("Address") + "," + rs.getString("Nationality") +
+            "," + rs.getString("Category"));
+        }
     }
 
     @Override
-    public void updatetoDb(int id, String newEmail,Connection conn) throws SQLException {
+    public void updatetoDb(int id, String newEmail, Connection conn) throws SQLException {
 
         // Open a connection
-            Statement stmt = conn.createStatement();
-            Scanner email = new Scanner(System.in);
-            String sql = "UPDATE Customer SET Email = " + email.nextLine() + " WHERE id in (100, 101)";
-            stmt.executeUpdate(sql);
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.close();
+        Statement stmt = conn.createStatement();
+        Scanner email = new Scanner(System.in);
+        String sql = "UPDATE Customer SET Email = " + email.nextLine() + " WHERE id in (100, 101)";
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.executeQuery(sql);
+        rs.close();
     }
 
     @Override
     public boolean deleteFromDb(int id, Connection conn) throws SQLException {
 
-            String query = "delete from Customer where id = ?";
-            PreparedStatement preparedStmt = conn.prepareStatement(query);
-//            preparedStmt.setInt(1, 3);
+        String query = "delete from Customer where id = ?";
+        Statement stmt = conn.createStatement();
 
-            preparedStmt.execute();
-            conn.close();
-            return true;
-
+        stmt.execute(query);
+        conn.close();
+        return true;
     }
 
     @Override
-    public List<Customer> getfromDb() {
-        return null;
+    public List<String> getfromDb(Connection conn) throws SQLException {
+        String query = "select *  from Customer  ";
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+
+        List<String> customers = null;
+        while (rs.next()) {
+            customers = Arrays.asList("id");
+        }
+
+        return customers;
     }
 
 }

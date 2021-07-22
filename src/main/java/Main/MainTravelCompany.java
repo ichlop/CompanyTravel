@@ -1,8 +1,10 @@
 package Main;
 
-import Main.dao.ConnectToDB;
-import Main.dao.CreateTable;
-import Main.dao.PassTheDataFromCSV;
+import Main.mainoperations.BackupDB;
+import Main.mainoperations.DBConnector;
+import Main.mainoperations.CreateTable;
+import Main.dao.CustomerRepository;
+import Main.mainoperations.PassTheDataFromCSV;
 import org.h2.tools.Server;
 
 import java.io.File;
@@ -12,14 +14,14 @@ import java.sql.SQLException;
 
 public class MainTravelCompany {
 
-    private static Server server;
+//    private static Server server;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
 
-        server = Server.createTcpServer("-tcpAllowOthers", "-tcpDaemon");
-        server.start();
+//        server = Server.createTcpServer("-tcpAllowOthers", "-tcpDaemon");
+//        server.start();
 
-        ConnectToDB db = new ConnectToDB();
+        DBConnector db = new DBConnector();
         db.setUpConnectionWithDB();
         Connection conn = db.setUpConnectionWithDB();
 
@@ -27,8 +29,21 @@ public class MainTravelCompany {
         ct.createTable(conn);
 
         PassTheDataFromCSV passdt = new PassTheDataFromCSV();
-        passdt.passTheData(new File("src/main/resources/Customer.csv"));
-        passdt.passTheData(new File("src/main/resources/Itineraries.csv"));
-        passdt.passTheData(new File("src/main/resources/orderedTicketsAndPayments.csv"));
+        String query1 = "INSERT INTO Customer ( Id,cName,Email,AddressCity,Nationality,Category) VALUES (?, ?, ?, ?, ?, ?)";
+        passdt.insertData(new File("src/main/resources/Customer.csv"), conn, query1);
+        String query2 = "INSERT INTO Customer ( Id,DepartureAirportId,DestinationAirportId,Departuredate, airlines) VALUES (?, ?, ?, ?, ?)";
+        passdt.insertData(new File("src/main/resources/Itineraries.csv"), conn, query2);
+        String query3 = "INSERT INTO Customer ( Id,PassengerId,ItineraryId,PaymentMethod,Amount) VALUES (?, ?, ?, ?, ?)";
+        passdt.insertData(new File("src/main/resources/orderedTicketsAndPayments.csv"), conn, query3);
+//
+//        CustomerRepository cr = new CustomerRepository();
+//        cr.addToDb(conn);
+//        cr.getfromDb(5,conn);
+//        cr.getfromDb(conn);
+////      Stream<String> stringStream = customers.stream();
+//
+//
+//        BackupDB backup = new BackupDB();
+//        backup.doTheBackup();
     }
 }
