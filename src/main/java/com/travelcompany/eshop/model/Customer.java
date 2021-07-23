@@ -1,4 +1,4 @@
-package Main.model;
+package com.travelcompany.eshop.model;
 
 import lombok.Data;
 

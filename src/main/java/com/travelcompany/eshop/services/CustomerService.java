@@ -1,8 +1,8 @@
-package Main.services;
+package com.travelcompany.eshop.services;
 
-import Main.model.Category;
-import Main.model.Customer;
-import Main.model.PayType;
+import com.travelcompany.eshop.model.Category;
+import com.travelcompany.eshop.model.Customer;
+import com.travelcompany.eshop.model.PayType;
 
 public class CustomerService extends Customer {
 
@@ -13,13 +13,13 @@ public class CustomerService extends Customer {
 
     private static double discounts(double amount, PayType payType, Category category) {
 
-        if (category.equals(Category.INDIVIDUAL)) {
+        if (category.equals(Category.Individual)) {
             amount = (amount * INDIVIDUAL_SURCHARGE);
-            if (payType.equals(PayType.CREDIT_CARD))
+            if (payType.equals(PayType.Creditcard))
                 amount = (amount * CREDIT_PAYMENT);
         } else {
             amount = (amount * BUSINESS_DISCOUNT);
-            if (payType.equals(PayType.CREDIT_CARD))
+            if (payType.equals(PayType.Creditcard))
                 amount = (amount * CREDIT_PAYMENT);
         }
 

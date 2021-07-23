@@ -1,4 +1,4 @@
-id,Name,Email,AddressCity,Nationality,Category
+id,name,email,addressCity,nationality,category
 1,Maria Iordanou,miordanou@mail.com ,Athens,Greek,Individual
 2,Dimitriou Dimitrios,ddimitriou@mail.com,Athens,Greek,Individual
 3,Ioannis Ioannou,iioannou@mail.com,Athens,Greek,Business
