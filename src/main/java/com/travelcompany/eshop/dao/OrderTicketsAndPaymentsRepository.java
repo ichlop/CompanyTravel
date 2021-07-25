@@ -1,6 +1,7 @@
 package com.travelcompany.eshop.dao;
 
 import com.travelcompany.eshop.dao.implementations.DaoRepository;
+import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.PayType;
 import com.travelcompany.eshop.model.Ticket;
 import org.slf4j.Logger;
@@ -72,29 +73,64 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
     }
 
     @Override
-    public boolean deleteFromDb(int id, Connection conn) throws SQLException {
+    public boolean deleteFromDb(int id, Connection conn){
 
         String query = "delete from orderedTicketsAndPayments where id = " + id;
-        Statement stmt = conn.createStatement();
-        stmt.execute(query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
+        try {
+            stmt.execute(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
         logger.info("Successfully deleted");
 //        conn.close();
         return true;
     }
 
     @Override
-    public List<Ticket> getListFromDb(Connection conn, String query) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+    public List<Ticket> getListFromDb(Connection conn, String query){
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+
+        }
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+
+        }
 
         List<Ticket> tickets = new ArrayList<>();
-        while (rs.next()) {
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
             //retrieve data from row
-            int id = rs.getInt("id");
-            int passengerId = rs.getInt("passengerId");
-            int itineraryId = rs.getInt("itineraryId");
-            String paymentMethod = rs.getString("paymentMethod");
-            double amountPaid = rs.getDouble("amountPaid");
+            int id = 0;
+            String paymentMethod = null;
+            int itineraryId = 0;
+            int passengerId = 0;
+            double amountPaid = 0;
+            try {
+                id = rs.getInt("id");
+                passengerId = rs.getInt("passengerId");
+                itineraryId = rs.getInt("itineraryId");
+                paymentMethod = rs.getString("paymentMethod");
+                amountPaid = rs.getDouble("amountPaid");
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
 
             //create ticket
             Ticket ticket = new Ticket();

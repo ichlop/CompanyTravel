@@ -1,6 +1,7 @@
 package com.travelcompany.eshop.dao;
 
 import com.travelcompany.eshop.dao.implementations.DaoRepository;
+import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.Itinerary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,19 +84,48 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
         }
 
     @Override
-    public List<Itinerary> getListFromDb(Connection conn, String query) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+    public List<Itinerary> getListFromDb(Connection conn, String query){
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+
+        }
 
         List<Itinerary> itineraries = new ArrayList<>();
-        while (rs.next()) {
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
             //retrieve data from row
-            int id = rs.getInt("id");
-            String departureAirportId = rs.getString("departureAirportId");
-            String destinationAirportId = rs.getString("destinationAirportId");
-            Date departureDate = rs.getDate("departureDate");
-            String airline = rs.getString("airline");
-            int price = rs.getInt("price");
+            int id = 0;
+            String departureAirportId = null;
+            String destinationAirportId = null;
+            Date departureDate = null;
+            String airline = null;
+            int price = 0;
+
+            try {
+                id = rs.getInt("id");
+                departureAirportId = rs.getString("departureAirportId");
+                destinationAirportId = rs.getString("destinationAirportId");
+                departureDate = rs.getDate("departureDate");
+                airline = rs.getString("airline");
+                price = rs.getInt("price");
+
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
 
             //create itinerary
             Itinerary itinerary = new Itinerary();

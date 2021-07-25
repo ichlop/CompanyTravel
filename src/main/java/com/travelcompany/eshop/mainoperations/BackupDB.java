@@ -1,38 +1,60 @@
 package com.travelcompany.eshop.mainoperations;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
+
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class BackupDB {
 
-    public static void doTheBackup(Connection conn) throws SQLException, FileNotFoundException {
+    public static void doTheBackup(Connection conn){
 
-        PrintWriter pw = new PrintWriter("c:\\Users\\chloptsi\\IdeaProjects\\backup\\file1.csv");
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter("c:\\Users\\chloptsi\\IdeaProjects\\backup\\file1.csv");
+        } catch (FileNotFoundException e) {
+            ExceptionHandler.handleException(e,"");
+        }
         StringBuilder sb = new StringBuilder();
 
         ResultSet rs = null;
 
         String query = "select * from Customer";
-        PreparedStatement ps = conn.prepareStatement(query);
-        rs = ps.executeQuery();
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
 
-        while (rs.next()) {
-            sb.append(rs.getString("id"));
-            sb.append(",");
-            sb.append(rs.getString("Name"));
-            sb.append(",");
-            sb.append(rs.getString("Email"));
-            sb.append(",");
-            sb.append(rs.getString("AddressCity"));
-            sb.append(",");
-            sb.append(rs.getString("Nationality"));
-            sb.append(",");
-            sb.append(rs.getString("Category"));
+
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
+            try {
+                sb.append(rs.getString("id"));
+                sb.append(",");
+                sb.append(rs.getString("Name"));
+                sb.append(",");
+                sb.append(rs.getString("Email"));
+                sb.append(",");
+                sb.append(rs.getString("AddressCity"));
+                sb.append(",");
+                sb.append(rs.getString("Nationality"));
+                sb.append(",");
+                sb.append(rs.getString("Category"));
+
+            } catch (SQLException e) {
+                ExceptionHandler.handleException(e,"");
+            }
             sb.append("\r\n");
         }
 
@@ -41,7 +63,15 @@ public class BackupDB {
         System.out.println("finished");
     }
 
-    public static void doTheStreamBackup() throws IOException {
 
+    public static void streamBackup (Map<Object,Long> ldapContent){
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream("streamData.csv"));
+            out.writeObject(ldapContent);
+            out.close();
+        } catch (IOException e) {
+            ExceptionHandler.handleException(e,"");
+        }
     }
 }
