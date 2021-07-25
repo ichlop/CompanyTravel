@@ -40,7 +40,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
 
         statement.executeUpdate(query);
         logger.info("Successfully added to DB");
-
+//        conn.close();
         return id.compareTo(id);
     }
 
@@ -55,7 +55,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
             System.out.println(rs.getInt("passengerId") + "," + rs.getInt("itineraryId") +
                     "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
         }
-        conn.close();
+//        conn.close();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.executeUpdate(query);
         logger.info("Successfully updated");
-        conn.close();
+//        conn.close();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         Statement stmt = conn.createStatement();
         stmt.execute(query);
         logger.info("Successfully deleted");
-        conn.close();
+//        conn.close();
         return true;
     }
 

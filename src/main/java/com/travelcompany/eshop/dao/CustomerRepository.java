@@ -23,7 +23,7 @@ public class CustomerRepository implements DaoRepository<Customer> {
         System.out.println("Id: ");
         String id = scanner.nextLine();
         System.out.println("Name: ");
-        String cName = scanner.nextLine();
+        String name = scanner.nextLine();
         System.out.println("Email: ");
         String email = scanner.nextLine();
         System.out.println("AddressCity: ");
@@ -33,10 +33,10 @@ public class CustomerRepository implements DaoRepository<Customer> {
         System.out.println("Category: ");
         String category = scanner.nextLine();
 
-        //UUID id = UUID.randomUUID();
+//        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer ( id , name , email, addressCity, nationality, category ) "
-                + " values ( " + id + cName + email + addressCity + nationality + category + ")";
+                + " values ( '" + id +"','"+ name + "','"+ email + "','"+ addressCity + "','"+ nationality + "','"+ category + "')";
         PreparedStatement statement = conn.prepareStatement(query);
 
         statement.executeUpdate(query);

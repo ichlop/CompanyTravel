@@ -10,7 +10,7 @@ public class Itinerary{
     private String departureAirportId;
     private String destinationAirportId;
     private Date departureDate;
-    private String airlines;
+    private String airline;
     private int price;
 
 }
