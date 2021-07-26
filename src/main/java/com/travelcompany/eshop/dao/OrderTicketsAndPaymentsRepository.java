@@ -11,14 +11,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     @Override
-    public int addToDb(Connection conn) throws SQLException {
+    public int addToDb(Connection conn){
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Id: ");
@@ -32,42 +31,82 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         System.out.println("Amount Paid: ");
         String amountPaid = scanner.nextLine();
 
-        Statement statement = conn.createStatement();
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
 
 //        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer (  id ,passengerId,itineraryId,paymentMethod,amountPaid) "
                 + " values ( " + id + passengerId + itineraryId + paymentMethod + amountPaid;
 
-        statement.executeUpdate(query);
+        try {
+            statement.executeUpdate(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+
+        }
         logger.info("Successfully added to DB");
 //        conn.close();
         return id.compareTo(id);
     }
 
     @Override
-    public void getFromDb(int id, Connection conn) throws SQLException, ClassNotFoundException {
+    public void getFromDb(int id, Connection conn){
 
         String query = "select *  from orderedTicketAndPayments  where id =" + id;
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException e) {
+            ExceptionHandler.handleException(e,"");
+        }
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
 
-        while (rs.next()) {
-            System.out.println(rs.getInt("passengerId") + "," + rs.getInt("itineraryId") +
-                    "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException e) {
+                ExceptionHandler.handleException(e,"");
+
+            }
+            try {
+                System.out.println(rs.getInt("passengerId") + "," + rs.getInt("itineraryId") +
+                        "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
+            } catch (SQLException e) {
+                ExceptionHandler.handleException(e,"");
+
+            }
         }
 //        conn.close();
     }
 
     @Override
-    public void updateDb(int id, Connection conn) throws SQLException {
+    public void updateDb(int id, Connection conn){
 
         // Open a connection
         System.out.println("Print new amountPaid: ");
         Scanner amountPaid = new Scanner(System.in);
         String query = "UPDATE orderedTicketsAndPayments SET amountPaid = '" + amountPaid + "' WHERE id= " + id;
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.executeUpdate(query);
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
+        try {
+            stmt.executeUpdate(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
         logger.info("Successfully updated");
 //        conn.close();
     }

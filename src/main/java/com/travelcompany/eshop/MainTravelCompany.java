@@ -1,5 +1,6 @@
 package com.travelcompany.eshop;
 
+import com.travelcompany.eshop.dao.CustomerRepository;
 import com.travelcompany.eshop.dao.ItineraryRepository;
 import com.travelcompany.eshop.dao.OrderTicketsAndPaymentsRepository;
 import com.travelcompany.eshop.mainoperations.*;
@@ -24,10 +25,10 @@ public class MainTravelCompany {
         CreateTable ct = new CreateTable();
         ct.createTable(conn);
 
-        PassDataFromCSV passData = new PassDataFromCSV();
-        passData.insertCustomerData(new File("src/main/resources/Customer.csv"), conn);
-        passData.insertItineraryData(new File("src/main/resources/Itineraries.csv"), conn);
-        passData.insertTicketData(new File("src/main/resources/orderedTicketsAndPayments.csv"), conn);
+//        PassDataFromCSV passData = new PassDataFromCSV();
+//        passData.insertCustomerData(new File("src/main/resources/Customer.csv"), conn);
+//        passData.insertItineraryData(new File("src/main/resources/Itineraries.csv"), conn);
+//        passData.insertTicketData(new File("src/main/resources/orderedTicketsAndPayments.csv"), conn);
 
 //        CustomerRepository cr = new CustomerRepository();
 //        cr.addToDb(conn);
@@ -67,7 +68,3 @@ public class MainTravelCompany {
         backup.doTheBackup(conn);
     }
 }
-
-//     todo: streams
-//     todo: exception handling
-//     todo: JUnit

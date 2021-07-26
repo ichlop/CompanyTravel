@@ -17,7 +17,7 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
     private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
         @Override
-        public int addToDb(Connection conn) throws SQLException{
+        public int addToDb(Connection conn){
 
             Scanner scanner = new Scanner(System.in);
             System.out.println("Departure Airport Id: ");
@@ -32,54 +32,111 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
             String price=scanner.nextLine();
 
 
-            Statement statement = conn.createStatement();
+            Statement statement = null;
+            try {
+                statement = conn.createStatement();
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
 
             UUID id = UUID.randomUUID();
 
             String query = "insert into itinerary ( id int primary key auto_increment , departureAirportId , destinationAirportId , departureDate, airline, price) "
                     + " values ( " + id + departureAirportId + destinationAirportId + departureDate + airline +price ;
 
-            statement.executeUpdate(query);
+            try {
+                statement.executeUpdate(query);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
             logger.info("Successfully added to DB");
 
             return id.compareTo(id);
         }
 
         @Override
-        public void getFromDb(int id, Connection conn) throws SQLException {
+        public void getFromDb(int id, Connection conn){
 
             String query = "select *  from itinerary  where id =" +id;
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-
-            while (rs.next()) {
-                System.out.println(rs.getString("departureAirportId") + "," + rs.getString("destinationAirportId") +
-                        "," + rs.getString("departureDate") + "," + rs.getString("airline") + "," + rs.getInt("price"));
+            Statement statement = null;
+            try {
+                statement = conn.createStatement();
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
             }
-            conn.close();
+            ResultSet rs = null;
+            try {
+                rs = statement.executeQuery(query);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
+
+            while (true) {
+                try {
+                    if (!rs.next()) break;
+                } catch (SQLException ex) {
+                    ExceptionHandler.handleException(ex,"");
+
+                }
+                try {
+                    System.out.println(rs.getString("departureAirportId") + "," + rs.getString("destinationAirportId") +
+                            "," + rs.getString("departureDate") + "," + rs.getString("airline") + "," + rs.getInt("price"));
+                } catch (SQLException ex) {
+                    ExceptionHandler.handleException(ex,"");
+
+                }
+            }
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
         }
 
         @Override
-        public void updateDb(int id, Connection conn) throws SQLException {
+        public void updateDb(int id, Connection conn){
 
             // Open a connection
             System.out.println("Print new email: ");
             Scanner departureAirportId = new Scanner(System.in);
             String query = "UPDATE itinerary SET departureAirport = '" + departureAirportId + "' WHERE id= " + id;
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.executeUpdate(query);
+            PreparedStatement stmt = null;
+            try {
+                stmt = conn.prepareStatement(query);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
+            try {
+                stmt.executeUpdate(query);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
             logger.info("Successfully updated");
-            conn.close();
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+
+            }
         }
 
         @Override
-        public boolean deleteFromDb(int id, Connection conn) throws SQLException {
+        public boolean deleteFromDb(int id, Connection conn){
 
             String query = "delete from itinerary where id = " +id;
-            Statement stmt = conn.createStatement();
-            stmt.execute(query);
-            logger.info("Successfully deleted");
-            conn.close();
+            Statement stmt = null;
+            try {
+                stmt = conn.createStatement();
+                stmt.execute(query);
+                logger.info("Successfully deleted");
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             return true;
         }
 

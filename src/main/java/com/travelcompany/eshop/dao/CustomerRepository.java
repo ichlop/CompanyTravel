@@ -1,6 +1,7 @@
 package com.travelcompany.eshop.dao;
 
 import com.travelcompany.eshop.dao.implementations.DaoRepository;
+import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.Category;
 import com.travelcompany.eshop.model.Customer;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ public class CustomerRepository implements DaoRepository<Customer> {
     private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     @Override
-    public int addToDb(Connection conn) throws SQLException {
+    public int addToDb(Connection conn) {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Id: ");
@@ -36,70 +37,152 @@ public class CustomerRepository implements DaoRepository<Customer> {
 //        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer ( id , name , email, addressCity, nationality, category ) "
-                + " values ( '" + id +"','"+ name + "','"+ email + "','"+ addressCity + "','"+ nationality + "','"+ category + "')";
-        PreparedStatement statement = conn.prepareStatement(query);
+                + " values ( '" + id + "','" + name + "','" + email + "','" + addressCity + "','" + nationality + "','" + category + "')";
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
 
-        statement.executeUpdate(query);
+        try {
+            statement.executeUpdate(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
         logger.info("Successfully added to DB");
 
         return id.compareTo(id);
     }
 
     @Override
-    public void getFromDb(int id, Connection conn) throws SQLException {
+    public void getFromDb(int id, Connection conn){
 
         String query = "select *  from customer  where id =" + id;
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
 
-        while (rs.next()) {
-            System.out.println(rs.getInt("Id") +rs.getString("Name") + "," + rs.getString("Email") +
-                    "," + rs.getString("AddressCity") + "," + rs.getString("Nationality") +
-                    "," + rs.getString("Category"));
         }
-        rs.close();
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
+
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
+            try {
+                System.out.println(rs.getInt("Id") + rs.getString("Name") + "," + rs.getString("Email") +
+                        "," + rs.getString("AddressCity") + "," + rs.getString("Nationality") +
+                        "," + rs.getString("Category"));
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
+        }
+        try {
+            rs.close();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+
+        }
 //        conn.close();
     }
 
     @Override
-    public void updateDb(int id, Connection conn) throws SQLException {
+    public void updateDb(int id, Connection conn) {
 
         // Open a connection
         System.out.println("Print new email: ");
         Scanner scan = new Scanner(System.in);
         String email = scan.next();
         String query = "UPDATE Customer SET Email = '" + email + "' WHERE id= " + id;
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate(query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+
+        }
+        try {
+            stmt.executeUpdate(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
         logger.info("Successfully updated");
 //        conn.close();
     }
 
     @Override
-    public boolean deleteFromDb(int id, Connection conn) throws SQLException {
+    public boolean deleteFromDb(int id, Connection conn) {
 
         String query = "delete from Customer where id = " + id;
-        Statement stmt = conn.createStatement();
-        stmt.execute(query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
+        try {
+            stmt.execute(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
         logger.info("Successfully deleted");
-        conn.close();
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, "");
+        }
         return true;
     }
 
     @Override
-    public List<Customer> getListFromDb(Connection conn, String query) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+    public List<Customer> getListFromDb(Connection conn, String query){
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery(query);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex,"");
+        }
 
         List<Customer> customers = new ArrayList<>();
-        while (rs.next()) {
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException ex) {
+            }
             //retrieve data from row
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-            String email = rs.getString("email");
-            String addressCity = rs.getString("addressCity");
-            String nationality = rs.getString("nationality");
-            String category = rs.getString("category");
+            int id = 0;
+            String name = null;
+            String email = null;
+            String addressCity = null;
+            String nationality =null;
+            String category = null;
+
+            try {
+                id = rs.getInt("id");
+                rs.getString("name");
+                rs.getString("email");
+                rs.getString("addressCity");
+                rs.getString("nationality");
+                rs.getString("category");
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex,"");
+            }
 
             //create customer
             Customer customer = new Customer();
