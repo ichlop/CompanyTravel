@@ -1,4 +1,4 @@
-package com.travelcompany.eshop.dao.implementations;
+package com.travelcompany.eshop.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;

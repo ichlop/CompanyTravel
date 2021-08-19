@@ -1,4 +1,4 @@
-package com.travelcompany.eshop.mainoperations;
+package com.travelcompany.eshop.mainoperations.DBoperations;
 
 import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import org.slf4j.Logger;
@@ -10,8 +10,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
-import static java.lang.System.exit;
 
 public class CreateTable {
 

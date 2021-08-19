@@ -1,23 +1,30 @@
 package com.travelcompany.eshop;
 
-import com.travelcompany.eshop.dao.CustomerRepository;
-import com.travelcompany.eshop.dao.ItineraryRepository;
-import com.travelcompany.eshop.dao.OrderTicketsAndPaymentsRepository;
-import com.travelcompany.eshop.mainoperations.*;
+import com.travelcompany.eshop.dao.implementations.CustomerRepository;
+import com.travelcompany.eshop.dao.implementations.ItineraryRepository;
+import com.travelcompany.eshop.dao.implementations.OrderTicketsAndPaymentsRepository;
+import com.travelcompany.eshop.mainoperations.DBoperations.BackupDB;
+import com.travelcompany.eshop.mainoperations.DBoperations.CreateTable;
+import com.travelcompany.eshop.mainoperations.DBoperations.DBConnector;
+import com.travelcompany.eshop.mainoperations.implementations.PassCustomerCSV;
+import com.travelcompany.eshop.mainoperations.implementations.PassItineraryCsv;
+import com.travelcompany.eshop.mainoperations.implementations.PassTicketsAndPaymentsCSV;
+import com.travelcompany.eshop.model.Category;
 import com.travelcompany.eshop.model.Itinerary;
+import com.travelcompany.eshop.model.PayType;
 import com.travelcompany.eshop.model.Ticket;
+import com.travelcompany.eshop.services.CustomerService;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class MainTravelCompany {
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) {
 
         DBConnector db = new DBConnector();
         Connection conn = db.setUpConnectionWithDB();
@@ -25,16 +32,71 @@ public class MainTravelCompany {
         CreateTable ct = new CreateTable();
         ct.createTable(conn);
 
-//        PassDataFromCSV passData = new PassDataFromCSV();
-//        passData.insertCustomerData(new File("src/main/resources/Customer.csv"), conn);
-//        passData.insertItineraryData(new File("src/main/resources/Itineraries.csv"), conn);
-//        passData.insertTicketData(new File("src/main/resources/orderedTicketsAndPayments.csv"), conn);
+        BackupDB backup = new BackupDB();
 
-//        CustomerRepository cr = new CustomerRepository();
-//        cr.addToDb(conn);
-//        cr.getFromDb(6,conn);
-//        cr.updateDb(4,conn);
-//        cr.deleteFromDb(3, conn);
+        CustomerService cs = new CustomerService();
+
+        CustomerRepository cr = new CustomerRepository();
+        System.out.println("Menu");
+        System.out.println(
+                "Type '1' to pass the data from csv' s \n" +
+                        "Type '2' to add a new customer \n" +
+                        "Type '3' to get a customer from DB \n" +
+                        "Type '4' to update a customer's info \n" +
+                        "Type '5' to delete a customer \n" +
+                        "Type '6' for backup\n" +
+                        "Type '7' to make a reservation");
+        Scanner sc = new Scanner(System.in);
+        int choice = sc.nextInt();
+
+        switch (choice) {
+            case 1:
+                PassCustomerCSV passCData = new PassCustomerCSV();
+                passCData.insertData(new File("src/main/resources/Customer.csv"), conn);
+                PassItineraryCsv passIData = new PassItineraryCsv();
+                passIData.insertData(new File("src/main/resources/Itineraries.csv"), conn);
+                PassTicketsAndPaymentsCSV passTData = new PassTicketsAndPaymentsCSV();
+                passTData.insertData(new File("src/main/resources/orderedTicketsAndPayments.csv"), conn);
+                break;
+            case 2:
+                cr.addToDb(conn);
+                break;
+            case 3:
+                System.out.println("Choose customer's id to appear");
+                int getChoice = sc.nextInt();
+                for (int i = 0; i < 100; i++) { //todo: get id.length
+                    if (getChoice == i) {
+                        cr.getFromDb(i, conn);
+                    }
+                }
+                break;
+            case 4:
+                System.out.println("Choose customer's id to update");
+                int updateChoice = sc.nextInt();
+                for (int i = 0; i < 100; i++) { //todo: get id.length
+                    if (updateChoice == i) {
+                        cr.updateDb(i, conn);
+                    }
+                }
+                break;
+            case 5:
+                System.out.println("Choose customer's id to delete");
+                int deleteChoice = sc.nextInt();
+                for (int i = 0; i < 100; i++) { //todo: get id.length
+                    if (deleteChoice == i) {
+                        cr.deleteFromDb(i, conn);
+                    }
+                }
+                break;
+            case 6:
+                backup.doTheBackup(conn);
+                break;
+            case 7:
+                cs.discounts(2000, PayType.Creditcard, Category.Individual);
+                break;
+            default:
+                System.out.println("type a number from 1 to 4");
+        }
 
         OrderTicketsAndPaymentsRepository or = new OrderTicketsAndPaymentsRepository();
         String getTicketsQuery = "SELECT * FROM orderedTicketsAndPayments";
@@ -62,9 +124,7 @@ public class MainTravelCompany {
         offerPerDeparture.forEach((k, v) -> System.out.println("Departure Airport: " + k + ", Total arrivals: " + v));
         System.out.println("-------------------------");
 
-//        BackUp
-        BackupDB backup = new BackupDB();
         backup.streamBackup(offerPerDestination);
-        backup.doTheBackup(conn);
+
     }
 }

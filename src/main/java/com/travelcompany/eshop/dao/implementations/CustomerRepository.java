@@ -1,6 +1,6 @@
-package com.travelcompany.eshop.dao;
+package com.travelcompany.eshop.dao.implementations;
 
-import com.travelcompany.eshop.dao.implementations.DaoRepository;
+import com.travelcompany.eshop.dao.DaoRepository;
 import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.Category;
 import com.travelcompany.eshop.model.Customer;
@@ -11,7 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class CustomerRepository implements DaoRepository<Customer> {
 
@@ -33,8 +32,6 @@ public class CustomerRepository implements DaoRepository<Customer> {
         String nationality = scanner.nextLine();
         System.out.println("Category: ");
         String category = scanner.nextLine();
-
-//        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer ( id , name , email, addressCity, nationality, category ) "
                 + " values ( '" + id + "','" + name + "','" + email + "','" + addressCity + "','" + nationality + "','" + category + "')";
@@ -93,7 +90,6 @@ public class CustomerRepository implements DaoRepository<Customer> {
             ExceptionHandler.handleException(ex,"");
 
         }
-//        conn.close();
     }
 
     @Override
@@ -117,7 +113,6 @@ public class CustomerRepository implements DaoRepository<Customer> {
             ExceptionHandler.handleException(ex, "");
         }
         logger.info("Successfully updated");
-//        conn.close();
     }
 
     @Override

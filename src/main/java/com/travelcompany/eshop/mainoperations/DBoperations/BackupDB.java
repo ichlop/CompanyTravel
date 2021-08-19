@@ -1,4 +1,4 @@
-package com.travelcompany.eshop.mainoperations;
+package com.travelcompany.eshop.mainoperations.DBoperations;
 
 import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 

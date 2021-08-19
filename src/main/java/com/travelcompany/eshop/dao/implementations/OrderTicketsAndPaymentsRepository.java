@@ -1,6 +1,6 @@
-package com.travelcompany.eshop.dao;
+package com.travelcompany.eshop.dao.implementations;
 
-import com.travelcompany.eshop.dao.implementations.DaoRepository;
+import com.travelcompany.eshop.dao.DaoRepository;
 import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.PayType;
 import com.travelcompany.eshop.model.Ticket;
