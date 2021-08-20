@@ -1,6 +1,5 @@
 package com.travelcompany.eshop.mainoperations.DBoperations;
 
-import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,44 +16,34 @@ public class CreateTable {
 
     private final Properties sqlCommands = new Properties();
 
-    public void createTable(Connection connection){
+    public void createTable(Connection connection) throws SQLException, IOException {
 
-    InputStream inputStream = CreateTable.class.getClassLoader().getResourceAsStream("sql.properties");
+        InputStream inputStream = CreateTable.class.getClassLoader().getResourceAsStream("sql.properties");
 
-        try {
-            sqlCommands.load(inputStream);
-        } catch (IOException e) {
-            ExceptionHandler.handleException(e,"unable to find sql.properties");
-        }
+
+        sqlCommands.load(inputStream);
+
 
         Statement statement = null;
 
-        try {
-            statement = connection.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        statement = connection.createStatement();
+
         int customerTable = 0;
-        try {
-            customerTable = statement.executeUpdate(sqlCommands.getProperty("create.customer.table"));
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"There is not such a table");
-        }
+
+        customerTable = statement.executeUpdate(sqlCommands.getProperty("create.customer.table"));
+
 
         logger.info("Created Customer table command was successful with result {}.", customerTable);
         int itineraryTable = 0;
-        try {
-            itineraryTable = statement.executeUpdate(sqlCommands.getProperty("create.itinerary.table"));
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"There is not such a table");
-        }
+
+        itineraryTable = statement.executeUpdate(sqlCommands.getProperty("create.itinerary.table"));
+
         logger.info("Created Itinerary table command was successful with result {}.", itineraryTable);
         int ticketsAndPayments = 0;
-        try {
-            ticketsAndPayments = statement.executeUpdate(sqlCommands.getProperty("create.orderedTicketsAndPayments.table"));
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"There is not such a table");
-        }
+
+        ticketsAndPayments = statement.executeUpdate(sqlCommands.getProperty("create.orderedTicketsAndPayments.table"));
+
         logger.info("Created Order Tickets and Payments table command was successful with result {}.", ticketsAndPayments);
 
 //        connection.close();

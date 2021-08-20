@@ -17,7 +17,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
     private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     @Override
-    public int addToDb(Connection conn){
+    public int addToDb(Connection conn) throws SQLException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Id: ");
@@ -32,144 +32,104 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         String amountPaid = scanner.nextLine();
 
         Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        statement = conn.createStatement();
 
 //        UUID id = UUID.randomUUID();
 
         String query = "insert into Customer (  id ,passengerId,itineraryId,paymentMethod,amountPaid) "
                 + " values ( " + id + passengerId + itineraryId + paymentMethod + amountPaid;
 
-        try {
-            statement.executeUpdate(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
+        statement.executeUpdate(query);
 
-        }
         logger.info("Successfully added to DB");
 //        conn.close();
         return id.compareTo(id);
     }
 
     @Override
-    public void getFromDb(int id, Connection conn){
+    public void getFromDb(int id, Connection conn) throws SQLException {
 
         String query = "select *  from orderedTicketAndPayments  where id =" + id;
         Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException(e,"");
-        }
+
+        statement = conn.createStatement();
+
         ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        rs = statement.executeQuery(query);
+
 
         while (true) {
-            try {
-                if (!rs.next()) break;
-            } catch (SQLException e) {
-                ExceptionHandler.handleException(e,"");
 
-            }
-            try {
-                System.out.println(rs.getInt("passengerId") + "," + rs.getInt("itineraryId") +
-                        "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
-            } catch (SQLException e) {
-                ExceptionHandler.handleException(e,"");
+            if (!rs.next()) break;
 
-            }
+            System.out.println(rs.getInt("passengerId") + "," + rs.getInt("itineraryId") +
+                    "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
+
         }
 //        conn.close();
     }
 
     @Override
-    public void updateDb(int id, Connection conn){
+    public void updateDb(int id, Connection conn) throws SQLException {
 
         // Open a connection
         System.out.println("Print new amountPaid: ");
         Scanner amountPaid = new Scanner(System.in);
         String query = "UPDATE orderedTicketsAndPayments SET amountPaid = '" + amountPaid + "' WHERE id= " + id;
         PreparedStatement stmt = null;
-        try {
-            stmt = conn.prepareStatement(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
-        try {
-            stmt.executeUpdate(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        stmt = conn.prepareStatement(query);
+
+        stmt.executeUpdate(query);
+
         logger.info("Successfully updated");
 //        conn.close();
     }
 
     @Override
-    public boolean deleteFromDb(int id, Connection conn){
+    public boolean deleteFromDb(int id, Connection conn) throws SQLException {
 
         String query = "delete from orderedTicketsAndPayments where id = " + id;
         Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
-        try {
-            stmt.execute(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        stmt = conn.createStatement();
+
+        stmt.execute(query);
+
         logger.info("Successfully deleted");
 //        conn.close();
         return true;
     }
 
     @Override
-    public List<Ticket> getListFromDb(Connection conn, String query){
+    public List<Ticket> getListFromDb(Connection conn, String query) throws SQLException {
         Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
+        statement = conn.createStatement();
 
-        }
         ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
 
-        }
+        rs = statement.executeQuery(query);
+
 
         List<Ticket> tickets = new ArrayList<>();
         while (true) {
-            try {
-                if (!rs.next()) break;
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
+
+            if (!rs.next()) break;
+
             //retrieve data from row
             int id = 0;
             String paymentMethod = null;
             int itineraryId = 0;
             int passengerId = 0;
             double amountPaid = 0;
-            try {
-                id = rs.getInt("id");
-                passengerId = rs.getInt("passengerId");
-                itineraryId = rs.getInt("itineraryId");
-                paymentMethod = rs.getString("paymentMethod");
-                amountPaid = rs.getDouble("amountPaid");
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
+
+            id = rs.getInt("id");
+            passengerId = rs.getInt("passengerId");
+            itineraryId = rs.getInt("itineraryId");
+            paymentMethod = rs.getString("paymentMethod");
+            amountPaid = rs.getDouble("amountPaid");
 
             //create ticket
             Ticket ticket = new Ticket();

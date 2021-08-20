@@ -11,35 +11,28 @@ import java.util.Map;
 
 public class BackupDB {
 
-    public static void doTheBackup(Connection conn){
+    public static void doTheBackup(Connection conn) throws SQLException, FileNotFoundException {
 
         PrintWriter pw = null;
-        try {
-            pw = new PrintWriter("c:\\Users\\chloptsi\\IdeaProjects\\backup\\file1.csv");
-        } catch (FileNotFoundException e) {
-            ExceptionHandler.handleException(e,"");
-        }
+
+        pw = new PrintWriter("c:\\Users\\chloptsi\\IdeaProjects\\backup\\file1.csv");
+
         StringBuilder sb = new StringBuilder();
 
         ResultSet rs = null;
 
         String query = "select * from Customer";
         PreparedStatement ps = null;
-        try {
+
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
 
 
         while (true) {
-            try {
+
                 if (!rs.next()) break;
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
-            try {
+
                 sb.append(rs.getString("id"));
                 sb.append(",");
                 sb.append(rs.getString("Name"));
@@ -52,9 +45,7 @@ public class BackupDB {
                 sb.append(",");
                 sb.append(rs.getString("Category"));
 
-            } catch (SQLException e) {
-                ExceptionHandler.handleException(e,"");
-            }
+
             sb.append("\r\n");
         }
 
@@ -64,14 +55,12 @@ public class BackupDB {
     }
 
 
-    public static void streamBackup (Map<Object,Long> ldapContent){
+    public static void streamBackup (Map<Object,Long> ldapContent) throws IOException {
         ObjectOutputStream out = null;
-        try {
+
             out = new ObjectOutputStream(new FileOutputStream("streamData.csv"));
             out.writeObject(ldapContent);
             out.close();
-        } catch (IOException e) {
-            ExceptionHandler.handleException(e,"");
-        }
+
     }
 }

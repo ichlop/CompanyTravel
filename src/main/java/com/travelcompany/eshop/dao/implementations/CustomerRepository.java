@@ -17,7 +17,7 @@ public class CustomerRepository implements DaoRepository<Customer> {
     private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     @Override
-    public int addToDb(Connection conn) {
+    public int addToDb(Connection conn) throws SQLException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Id: ");
@@ -36,64 +36,47 @@ public class CustomerRepository implements DaoRepository<Customer> {
         String query = "insert into Customer ( id , name , email, addressCity, nationality, category ) "
                 + " values ( '" + id + "','" + name + "','" + email + "','" + addressCity + "','" + nationality + "','" + category + "')";
         PreparedStatement statement = null;
-        try {
-            statement = conn.prepareStatement(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
 
-        try {
-            statement.executeUpdate(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
+        statement = conn.prepareStatement(query);
+
+
+        statement.executeUpdate(query);
+
         logger.info("Successfully added to DB");
 
         return id.compareTo(id);
     }
 
     @Override
-    public void getFromDb(int id, Connection conn){
+    public void getFromDb(int id, Connection conn) throws SQLException {
 
         String query = "select *  from customer  where id =" + id;
         Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
 
-        }
+        statement = conn.createStatement();
+
         ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        rs = statement.executeQuery(query);
+
 
         while (true) {
-            try {
-                if (!rs.next()) break;
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
-            try {
-                System.out.println(rs.getInt("Id") + rs.getString("Name") + "," + rs.getString("Email") +
-                        "," + rs.getString("AddressCity") + "," + rs.getString("Nationality") +
-                        "," + rs.getString("Category"));
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
-        }
-        try {
-            rs.close();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
+
+            if (!rs.next()) break;
+
+
+            System.out.println(rs.getInt("Id") + rs.getString("Name") + "," + rs.getString("Email") +
+                    "," + rs.getString("AddressCity") + "," + rs.getString("Nationality") +
+                    "," + rs.getString("Category"));
 
         }
+
+        rs.close();
+
     }
 
     @Override
-    public void updateDb(int id, Connection conn) {
+    public void updateDb(int id, Connection conn) throws SQLException {
 
         // Open a connection
         System.out.println("Print new email: ");
@@ -101,83 +84,65 @@ public class CustomerRepository implements DaoRepository<Customer> {
         String email = scan.next();
         String query = "UPDATE Customer SET Email = '" + email + "' WHERE id= " + id;
         Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
 
-        }
-        try {
-            stmt.executeUpdate(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
+        stmt = conn.createStatement();
+
+
+        stmt.executeUpdate(query);
+
         logger.info("Successfully updated");
     }
 
     @Override
-    public boolean deleteFromDb(int id, Connection conn) {
+    public boolean deleteFromDb(int id, Connection conn) throws SQLException {
 
         String query = "delete from Customer where id = " + id;
         Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
-        try {
-            stmt.execute(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
+
+        stmt = conn.createStatement();
+
+
+        stmt.execute(query);
+
         logger.info("Successfully deleted");
-        try {
-            conn.close();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, "");
-        }
+
+        conn.close();
+
         return true;
     }
 
     @Override
-    public List<Customer> getListFromDb(Connection conn, String query){
+    public List<Customer> getListFromDb(Connection conn, String query) throws SQLException {
         Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        statement = conn.createStatement();
+
         ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-        } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex,"");
-        }
+
+        rs = statement.executeQuery(query);
+
 
         List<Customer> customers = new ArrayList<>();
         while (true) {
-            try {
-                if (!rs.next()) break;
-            } catch (SQLException ex) {
-            }
+
+            if (!rs.next()) break;
+
             //retrieve data from row
             int id = 0;
             String name = null;
             String email = null;
             String addressCity = null;
-            String nationality =null;
+            String nationality = null;
             String category = null;
 
-            try {
-                id = rs.getInt("id");
-                rs.getString("name");
-                rs.getString("email");
-                rs.getString("addressCity");
-                rs.getString("nationality");
-                rs.getString("category");
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex,"");
-            }
+
+            id = rs.getInt("id");
+            rs.getString("name");
+            rs.getString("email");
+            rs.getString("addressCity");
+            rs.getString("nationality");
+            rs.getString("category");
+
 
             //create customer
             Customer customer = new Customer();
