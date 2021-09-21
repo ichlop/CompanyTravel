@@ -1,7 +1,6 @@
 package com.travelcompany.eshop.dao.implementations;
 
 import com.travelcompany.eshop.dao.DaoRepository;
-import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.model.Itinerary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +38,8 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
 
         UUID id = UUID.randomUUID();
 
-        String query = "insert into itinerary ( id int primary key auto_increment , departureAirportId , destinationAirportId , departureDate, airline, price) "
-                + " values ( " + id + departureAirportId + destinationAirportId + departureDate + airline + price;
+        String query = "insert into itinerary (  departureAirportId , destinationAirportId , departureDate, airline, price) "
+                + " values ( " + departureAirportId + "','" + destinationAirportId + "','" + departureDate + "','" + airline + "','" + price;
 
 
         statement.executeUpdate(query);

@@ -33,8 +33,8 @@ public class CustomerRepository implements DaoRepository<Customer> {
         System.out.println("Category: ");
         String category = scanner.nextLine();
 
-        String query = "insert into Customer ( id , name , email, addressCity, nationality, category ) "
-                + " values ( '" + id + "','" + name + "','" + email + "','" + addressCity + "','" + nationality + "','" + category + "')";
+        String query = "insert into Customer ( name , email, addressCity, nationality, category ) "
+                + " values ( '" + name + "','" + email + "','" + addressCity + "','" + nationality + "','" + category + "')";
         PreparedStatement statement = null;
 
         statement = conn.prepareStatement(query);

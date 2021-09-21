@@ -37,8 +37,8 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
 
 //        UUID id = UUID.randomUUID();
 
-        String query = "insert into Customer (  id ,passengerId,itineraryId,paymentMethod,amountPaid) "
-                + " values ( " + id + passengerId + itineraryId + paymentMethod + amountPaid;
+        String query = "insert into Customer ( passengerId,itineraryId,paymentMethod,amountPaid) "
+                + " values ( " + passengerId + "','" + itineraryId + "','" + paymentMethod + "','" + amountPaid;
 
         statement.executeUpdate(query);
 

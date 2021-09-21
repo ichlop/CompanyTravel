@@ -12,5 +12,3 @@ public class MainTravelCompany {
 }
 
 // todo: Junit
-// todo: check if an id exists
-// todo: id auto increment
