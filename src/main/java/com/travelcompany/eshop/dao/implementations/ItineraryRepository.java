@@ -30,23 +30,19 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
         System.out.println("Price: ");
         String price = scanner.nextLine();
 
-
         Statement statement = null;
 
         statement = conn.createStatement();
 
-
-        UUID id = UUID.randomUUID();
-
         String query = "insert into itinerary (  departureAirportId , destinationAirportId , departureDate, airline, price) "
                 + " values ( " + departureAirportId + "','" + destinationAirportId + "','" + departureDate + "','" + airline + "','" + price;
-
 
         statement.executeUpdate(query);
 
         logger.info("Successfully added to DB");
 
-        return id.compareTo(id);
+        conn.close();
+        return departureAirportId.compareTo(departureAirportId);
     }
 
     @Override
@@ -70,6 +66,7 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
                     "," + rs.getString("departureDate") + "," + rs.getString("airline") + "," + rs.getInt("price"));
 
         }
+        rs.close();
         conn.close();
 
     }
@@ -90,7 +87,6 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
         logger.info("Successfully updated");
 
         conn.close();
-
     }
 
     @Override
@@ -117,7 +113,6 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
 
         rs = statement.executeQuery(query);
 
-
         List<Itinerary> itineraries = new ArrayList<>();
         while (true) {
 
@@ -131,14 +126,12 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
             String airline = null;
             int price = 0;
 
-
             id = rs.getInt("id");
             departureAirportId = rs.getString("departureAirportId");
             destinationAirportId = rs.getString("destinationAirportId");
             departureDate = rs.getDate("departureDate");
             airline = rs.getString("airline");
             price = rs.getInt("price");
-
 
             //create itinerary
             Itinerary itinerary = new Itinerary();
@@ -152,6 +145,9 @@ public class ItineraryRepository implements DaoRepository<Itinerary> {
             //add to list
             itineraries.add(itinerary);
         }
+
+        rs.close();
+        conn.close();
 
         return itineraries;
     }

@@ -44,6 +44,8 @@ public class CustomerRepository implements DaoRepository<Customer> {
 
         logger.info("Successfully added to DB");
 
+        conn.close();
+
         return id.compareTo(id);
     }
 
@@ -64,14 +66,13 @@ public class CustomerRepository implements DaoRepository<Customer> {
 
             if (!rs.next()) break;
 
-
             System.out.println(rs.getInt("Id") + rs.getString("Name") + "," + rs.getString("Email") +
                     "," + rs.getString("AddressCity") + "," + rs.getString("Nationality") +
                     "," + rs.getString("Category"));
-
         }
 
         rs.close();
+        conn.close();
 
     }
 
@@ -91,6 +92,8 @@ public class CustomerRepository implements DaoRepository<Customer> {
         stmt.executeUpdate(query);
 
         logger.info("Successfully updated");
+
+        conn.close();
     }
 
     @Override
@@ -121,7 +124,6 @@ public class CustomerRepository implements DaoRepository<Customer> {
 
         rs = statement.executeQuery(query);
 
-
         List<Customer> customers = new ArrayList<>();
         while (true) {
 
@@ -135,14 +137,12 @@ public class CustomerRepository implements DaoRepository<Customer> {
             String nationality = null;
             String category = null;
 
-
             id = rs.getInt("id");
             rs.getString("name");
             rs.getString("email");
             rs.getString("addressCity");
             rs.getString("nationality");
             rs.getString("category");
-
 
             //create customer
             Customer customer = new Customer();
@@ -156,6 +156,8 @@ public class CustomerRepository implements DaoRepository<Customer> {
             customers.add(customer);
         }
 
+        rs.close();
+        conn.close();
         return customers;
     }
 }

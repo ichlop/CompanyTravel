@@ -35,15 +35,13 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
 
         statement = conn.createStatement();
 
-//        UUID id = UUID.randomUUID();
-
         String query = "insert into Customer ( passengerId,itineraryId,paymentMethod,amountPaid) "
                 + " values ( " + passengerId + "','" + itineraryId + "','" + paymentMethod + "','" + amountPaid;
 
         statement.executeUpdate(query);
 
         logger.info("Successfully added to DB");
-//        conn.close();
+        conn.close();
         return id.compareTo(id);
     }
 
@@ -68,7 +66,8 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
                     "," + rs.getString("paymentMethod") + "," + rs.getDouble("amountPaid"));
 
         }
-//        conn.close();
+        rs.close();
+        conn.close();
     }
 
     @Override
@@ -85,7 +84,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         stmt.executeUpdate(query);
 
         logger.info("Successfully updated");
-//        conn.close();
+        conn.close();
     }
 
     @Override
@@ -99,7 +98,7 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
         stmt.execute(query);
 
         logger.info("Successfully deleted");
-//        conn.close();
+        conn.close();
         return true;
     }
 
@@ -144,7 +143,10 @@ public class OrderTicketsAndPaymentsRepository implements DaoRepository<Ticket> 
             tickets.add(ticket);
         }
 
+        rs.close();
+        conn.close();
         return tickets;
     }
+
 
 }
