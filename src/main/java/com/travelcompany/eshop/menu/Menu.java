@@ -7,9 +7,9 @@ import com.travelcompany.eshop.exceptionhandle.ExceptionHandler;
 import com.travelcompany.eshop.mainoperations.DBoperations.BackupDB;
 import com.travelcompany.eshop.mainoperations.DBoperations.CreateTable;
 import com.travelcompany.eshop.mainoperations.DBoperations.DBConnector;
-import com.travelcompany.eshop.mainoperations.implementations.PassCustomerCSV;
-import com.travelcompany.eshop.mainoperations.implementations.PassItineraryCsv;
-import com.travelcompany.eshop.mainoperations.implementations.PassTicketsAndPaymentsCSV;
+import com.travelcompany.eshop.mainoperations.datapass.PassCustomerCSV;
+import com.travelcompany.eshop.mainoperations.datapass.PassItineraryCsv;
+import com.travelcompany.eshop.mainoperations.datapass.PassTicketsAndPaymentsCSV;
 import com.travelcompany.eshop.model.*;
 import com.travelcompany.eshop.services.CustomerService;
 

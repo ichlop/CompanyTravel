@@ -1,6 +1,6 @@
-package com.travelcompany.eshop.mainoperations.implementations;
+package com.travelcompany.eshop.mainoperations.datapass;
 
-import com.travelcompany.eshop.mainoperations.DataInsert;
+import com.travelcompany.eshop.mainoperations.datapass.implementation.DataInsert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
